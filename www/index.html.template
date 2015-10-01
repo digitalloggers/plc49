@@ -1,0 +1,128 @@
+<!doctype html>
+<html class="no-js not-loaded" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>DLI PLC49</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- !CSS css/normalize.css -->
+<!-- !CSS css/h5bp.css -->
+<!-- !CSS css/main.css -->
+<!-- !JS js/init.js -->
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please upgrade your browser to improve your experience.</p>
+        <![endif]-->
+        <p class="must-use-js">
+          You have to enable JavaScript in your browser to interact with PLC49.
+        </p>
+        <p class="loading">
+          Loading, please wait...
+        </p>
+        <div class="main">
+          <div class="header">
+            <span class="name">DLI PLC49</span>
+          </div>
+          <table class="main">
+            <tr>
+              <td class="config-outer">
+                <div class="status">
+                  <p>Outlet states:</p>
+                  <div class="outlets">
+                  </div>
+                  <p>Input values:</p>
+                  <div class="inputs">
+                  </div>
+                  <p>ADC levels:</p>
+                  <div class="adc">
+                  </div>
+                </div>
+                <div class="wifi-config">
+                  <table>
+                    <tr>
+                      <td>WiFi mode:</td>
+                      <td>
+                        <form class="wifi-mode" action="#">
+                          <select name="mode">
+                            <option value="ap">Access Point</option>
+                            <option value="sta">Station</option>
+                            <option value="sta+ap">Station+Access Point</option>
+                          </select>
+                        </form>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Access Point:</td>
+                      <td>
+                        <form class="wifi-ap" action="#">
+                          <table>
+                            <tr>
+                              <td>SSID:</td>
+                              <td>
+                                <input type="text" name="ssid"/>
+                              </td>
+                              <td rowspan="2">
+                                <input type="submit" value="Save"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Key:</td>
+                              <td>
+                                <input type="password" name="key"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Station:</td>
+                      <td>
+                        <form class="wifi-sta" action="#">
+                          <table>
+                            <tr>
+                              <td>SSID:</td>
+                              <td>
+                                <input type="text" name="ssid"/>
+                              </td>
+                              <td rowspan="2">
+                                <input type="submit" value="Save"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>Key:</td>
+                              <td>
+                                <input type="password" name="key"/>
+                              </td>
+                            </tr>
+                          </table>
+                        </form>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="version-spacer">
+                </div>
+                <div class="version">
+                </div>
+              </td>
+              <td class="console-outer">
+                <div class="console">
+                  <div class="title">Lua console<div class="heap"></div></div>
+                  <div class="log">
+                  </div>
+                  <div class="entry">
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+<!-- !JS js/jquip.js -->
+<!-- !JS js/plugins.js -->
+<!-- !JS js/main.js -->
+    </body>
+</html>

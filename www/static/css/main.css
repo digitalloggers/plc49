@@ -1,0 +1,205 @@
+html {
+    height: 100%;
+    font-size: 16px;
+}
+
+body {
+    height: 100%;
+}
+
+.js .must-use-js {
+    display:none;
+}
+
+.no-js .main, .not-loaded .main {
+    display:none;
+}
+
+.not-loaded .loading {
+    display:block;
+}
+
+.loading {
+    display:none;
+}
+
+.not-loaded .main {
+    display:none;
+}
+
+.main {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.input .value {
+    text-align: center;
+    min-width: 6em;
+    min-height: 1.5em;
+}
+
+.input .value.active {
+    color: #FF0000;
+}
+
+.input .value.inert {
+    color: #0000FF;
+}
+
+.outlet .value {
+    text-align: center;
+    min-width: 6em;
+    min-height: 1.5em;
+}
+
+.outlet .value.on {
+    color: #FF0000;
+}
+
+.outlet .value.off {
+    color: #000000;
+}
+
+.adc .name {
+    display: block;
+}
+
+.adc .value {
+    display: block;
+    position: relative;
+    margin: 0px;
+    border: 1px solid;
+    padding: 0px;
+    min-width: 12em;
+    background-color: #FFFFFF;
+}
+
+.adc .gauge {
+    display: inline-block;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+    height: 100%;
+    background-color: #FF9999;
+    z-index: 1;
+}
+
+.adc .label {
+    position: relative;
+    text-align: center;
+    z-index: 2;
+}
+
+.header {
+    max-height: 2em;
+}
+
+.header {
+    margin: 0px;
+    border-bottom: 1px solid #CCCCCC;
+    background-color: #F4F4F4;
+}
+
+.config-outer {
+    position: relative;
+    vertical-align: top;
+    width: 33%;
+    border-right: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+    background-color: #FAFAFA;
+}
+
+.edit-form {
+    margin: 0px;
+    border: 0px;
+    padding: 0px;
+}
+.status {
+    border-bottom: 1px solid #CCCCCC;
+    padding: 1em 0em;
+}
+
+.wifi-config {
+    border-bottom: 1px solid #CCCCCC;
+    padding: 1em 0em;
+}
+
+.wifi-config table {
+    width: 100%
+};
+
+.wifi-config > table > tbody > tr > td {
+    border: 1px solid #CCCCCC;
+}
+
+.version-spacer {
+    height: 2em;
+}
+
+.version {
+    position: absolute;
+    bottom: 0px;
+    height: 2em;
+}
+
+.console-outer {
+    vertical-align: top;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.console .title {
+    position: relative;
+}
+
+.console .heap {
+    font-size: 0.75em;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.console .log {
+    text-align: left;
+    overflow-y: auto;
+    max-height: 20em;
+}
+
+.console .log pre {
+    font-size: 0.75em;
+    margin: 0px;
+    margin-left: 0.3em;
+    padding-left: 0.5em;
+}
+
+.console .log .sent {
+    border-left: 1px solid #999900;
+    color: #999900;
+}
+
+.console .log .acked {
+    border-left: 1px solid #009900;
+    color: #009900;
+}
+
+.console .log .parse-error {
+    border-left: 1px solid #CC0000;
+    color: #CC0000;
+}
+
+.console .log .run-error {
+    border-left: 1px solid #FF0000;
+    color: #FF0000;
+}
+
+.console .log .print, .console .log .result {
+    border-left: 1px solid #0000FF;
+    color: #0000FF;
+}
+
+.console .entry form input {
+    width: 95%;
+}
