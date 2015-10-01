@@ -1,0 +1,3 @@
+[submodule "nodemcu-env"]
+	path = nodemcu-env
+	url = https://github.com/digitalloggers/nodemcu-env
