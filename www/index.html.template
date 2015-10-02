@@ -51,6 +51,7 @@
                             <option value="sta">Station</option>
                             <option value="sta+ap">Station+Access Point</option>
                           </select>
+                          <input type="submit" value="Save"/>
                         </form>
                       </td>
                     </tr>

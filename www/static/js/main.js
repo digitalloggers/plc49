@@ -158,8 +158,9 @@ $(function()
       )
       insistentSafeAjax({url:"/config",dataType:"application/json",success:function(data)
               {
-                  $(".header .name").val(data.name);
-                  mode_form.find("input[name=mode]").val(data.wifi_mode);
+                  $(".header .name").text(data.name);
+                  $(".version").text(data.version?"Version "+data.version:"Unknown version");
+                  mode_form.find("select[name=mode] option[value=\""+data.wifi_mode+"\"]").attr("selected","selected");
                   ap_form.find("input[name=ssid]").val(data.wifi_ap[0]||"");
                   ap_form.find("input[name=key]").val(data.wifi_ap[1]||"");
                   sta_form.find("input[name=ssid]").val(data.wifi_sta[0]||"");
@@ -216,14 +217,18 @@ $(function()
                         );
                   periodic_requests_ok=true;
               }
-             });
+      });
+      mode_form.submit(function(evt){
+          evt.preventDefault();
+          insistentAjax({url:"/config/wifi_mode",data:JSON.stringify(mode_form.find("select[name=mode]").val()),type:"PUT",contentType:"application/json"});
+      });
       ap_form.submit(function(evt){
           evt.preventDefault();
-          insistentAjax({url:"/config/wifi_ap",data:JSON.stringify([ap_form.find("input[name=ssid]").val(),ap_form.find("input[name=key]").val(),]),type:"PUT",contentType:"application/json"});
+          insistentAjax({url:"/config/wifi_ap",data:JSON.stringify([ap_form.find("input[name=ssid]").val(),ap_form.find("input[name=key]").val()]),type:"PUT",contentType:"application/json"});
       });
       sta_form.submit(function(evt){
           evt.preventDefault();
-          insistentAjax({url:"/config/wifi_sta",data:JSON.stringify([sta_form.find("input[name=ssid]").val(),sta_form.find("input[name=key]").val(),]),type:"PUT",contentType:"application/json"});
+          insistentAjax({url:"/config/wifi_sta",data:JSON.stringify([sta_form.find("input[name=ssid]").val(),sta_form.find("input[name=key]").val()]),type:"PUT",contentType:"application/json"});
       });
       var heap=$(".console .heap");
       var log=$(".console .log");
