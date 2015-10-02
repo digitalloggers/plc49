@@ -33,6 +33,15 @@ body {
     height: 100%;
 }
 
+.inputs > table {
+    width:100%;
+}
+
+.inputs > table td {
+    width: 50%;
+    border: 1px solid #ccc;
+}
+
 .input .value {
     text-align: center;
     min-width: 6em;
@@ -45,6 +54,16 @@ body {
 
 .input .value.inert {
     color: #0000FF;
+}
+
+
+.outlets > table {
+    width:100%;
+}
+
+.outlets > table td {
+    width: 50%;
+    border: 1px solid #ccc;
 }
 
 .outlet .value {
