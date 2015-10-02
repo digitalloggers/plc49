@@ -5,10 +5,12 @@ OUTDIR="$HERE/rootfs"
 
 ENV="$HERE/nodemcu-env"
 LUAC="$ENV/nodemcu-firmware/luac.cross"
+VERSIONFILE="$1";shift
 
 STATIC=www/static
 rm -rf $OUTDIR
 mkdir -p $OUTDIR
+mkdir -p $OUTDIR/config
 mkdir -p $OUTDIR/www/static
 
 {
@@ -71,3 +73,7 @@ for STATIC_FILE in     \
     ; do
     cp $HERE/www/static/$STATIC_FILE $OUTDIR/www/static/$STATIC_FILE
 done
+
+if [ -n "$VERSIONFILE" ]; then
+    cp "$VERSIONFILE" "$OUTDIR/config/version"
+fi

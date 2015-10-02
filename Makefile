@@ -4,7 +4,8 @@ env:
 	./prepare_nodemcu_env.sh
 
 rootfs: env
-	./build-fs-dir.sh
+	git rev-parse HEAD >.version
+	./build-fs-dir.sh .version
 
 plc49.bin: env rootfs
 	./build-plc49.sh
