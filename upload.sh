@@ -10,7 +10,7 @@ if ! [ -d "${CACHE}" ]; then
     mkdir -p "${CACHE}"
 fi
 UPLOADER=${ENV}/nodemcu-uploader/nodemcu-uploader.py
-UPLOADER_OPTS="--fail_on_error"
+UPLOADER_OPTS=""
 UPLOADER_ARGS=""
 if [ -n "${ESP8266_PORT}" ]; then
     UPLOADER_OPTS="${UPLOADER_OPTS} --port ${ESP8266_PORT}"
