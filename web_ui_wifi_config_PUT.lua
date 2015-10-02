@@ -9,7 +9,7 @@ return function(state,s,data,kind)
                     wifi.setmode(wifi.STATIONAP)
                 end
                 -- XXX: interface differs from wifi.sta.config
-                wifi.ap.config({ssid=data[1],pwd=data[2]})
+                wifi.ap.config({ssid=data[1],pwd=data[2],auth=wifi.WPA2_PSK})
                 if mode==wifi.STATION then
                     wifi.setmode(mode)
                 end
