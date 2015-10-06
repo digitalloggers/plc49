@@ -11,4 +11,4 @@ fi
 if [ -n "${ESP8266_BAUD}" ]; then
     ESPTOOL_OPTS="${ESPTOOL_OPTS} --baud ${ESP8266_BAUD}"
 fi
-"${ESPTOOL}" "${ESPTOOL_OPTS}" write_flash --flash_verbatim "${IMAGE}"
+"${ESPTOOL}" ${ESPTOOL_OPTS} write_flash --flash_verbatim 0 "${IMAGE}"
