@@ -62,7 +62,6 @@ return function(state,data)
             end
         end
         if handler then
-            print("OPEN!",handler.."_"..method)
             if file.open(handler.."_"..method..".lua") or file.open(handler.."_"..method..".lc") then
                 file.close()
                 return handler.."_"..method,arguments or {}
