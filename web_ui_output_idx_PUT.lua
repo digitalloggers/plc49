@@ -2,19 +2,26 @@ local p=require"pinout"
 local http_util=require"http_util"
 
 return function(state,send,data,idx)
-    idx=p.output[tonumber(idx)+1]
-
-    if idx then
-        local function set_value(send,data)
-            if data==0 or data==1 then
+    local function set_value(send,data)
+        if data==0 or data==1 then
+            if idx then
                 gpio.write(idx,data)
-                return 204
             else
-                return 400,nil,"0 or 1 expected"
+                for i,v in ipairs(p.output) do
+                    gpio.write(v,data)
+                end
             end
+            return 204
+        else
+            return 400,nil,"0 or 1 expected"
         end
-        return http_util.make_json_receiver(set_value)(send,data)
-    else
-        return 404
     end
+    if idx then
+        idx=tonumber(idx)
+        idx=idx and p.output[idx+1]
+        if not idx then
+            return 404
+        end
+    end
+    return http_util.make_json_receiver(set_value)(send,data)
 end

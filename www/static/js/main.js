@@ -77,6 +77,7 @@ var cssMask={"display":"both","width":"box","height":"box","background":"box","f
 
 var makeEditable=function(element,config_url)
 {
+    element.addClass("editable");
     element.click(
         function(evt)
         {
@@ -106,6 +107,8 @@ $(function()
       $("html").removeClass("not-loaded");
       var input_container=$("<table/>").appendTo($("div.inputs"));
       var outlet_container=$("<table/>").appendTo($("div.outlets"));
+      var cycle_time=$("<span/>").text("1");
+      $("<p/>").append("Cycle delay: ").append(cycle_time).append(" seconds").appendTo($("div.outlets"));
       var adc_container=$("div.adc");
       var mode_form=$("form.wifi-mode");
       var ap_form=$("form.wifi-ap");
@@ -119,6 +122,7 @@ $(function()
       var next_request_time;
       var periodic_requests_ok=false;
       makeEditable($(".header .name"),"/config/name");
+      makeEditable(cycle_time,"/config/cycle_time");
       var updateInput=function(index,state)
       {
           input_values[index].removeClass(!state?"active":"inert").addClass(state?"active":"inert").text(state?"ACTIVE":"INERT");
@@ -178,9 +182,38 @@ $(function()
                              input_values[i]=input_value;
                              makeEditable(input_name,"/state/input/"+i+"/name");
                              updateInput(i,e.value);
-                             input_container.append($("<tr/>").addClass("input").append($("<td/>").append(input_name)).append($("<td/>").append(input_value)));
+                             input_container.append($("<tr/>").addClass("input").append($("<th/>").append(input_name)).append($("<td/>").append(input_value)));
                          }
                         );
+                  var all_on=$("<button/>").addClass("value on").text("ON");
+                  var all_off=$("<button/>").addClass("value off").text("OFF");
+                  var all_cycle=$("<button/>").addClass("cycle on").text("CYCLE");
+                  var all_pulse=$("<button/>").addClass("cycle off").text("PULSE");
+                  all_on.click(
+                      function()
+                      {
+                          insistentAjax({url:"/state/output/all/value",data:1,type:"PUT",contentType:"application/json"});
+                      });
+                  all_off.click(
+                      function()
+                      {
+                          insistentAjax({url:"/state/output/all/value",data:0,type:"PUT",contentType:"application/json"});
+                      });
+                  all_cycle.click(
+                      function()
+                      {
+                          insistentAjax({url:"/state/output/all/cycle",data:JSON.stringify([0,parseFloat(cycle_time.text())||1]),type:"POST",contentType:"application/json"});
+                      });
+                  all_pulse.click(
+                      function()
+                      {
+                          insistentAjax({url:"/state/output/all/cycle",data:JSON.stringify([1,parseFloat(cycle_time.text())||1]),type:"POST",contentType:"application/json"});
+                      });
+                  outlet_container
+                      .append($("<tr/>").addClass("outlet all")
+                              .append($("<th/>").append("All outlets"))
+                              .append($("<td/>").append(all_on).append(all_off))
+                              .append($("<td/>").append(all_pulse).append(all_cycle)));
                   $.each(data.output,function(i,e)
                          {
                              var outlet_name=$("<span/>").addClass("name").text(e.name);
@@ -201,9 +234,10 @@ $(function()
                              outlet_cycler.click(
                                  function()
                                  {
-                                     insistentAjax({url:"/state/output/"+i.toString()+"/cycle",type:"POST"});
+                                     var transient_state=outlet_value.hasClass("on")?0:1;
+                                     insistentAjax({url:"/state/output/"+i.toString()+"/cycle",data:JSON.stringify([transient_state,parseFloat(cycle_time.text())||1]),type:"POST",contentType:"application/json"});
                                  });
-                             outlet_container.append($("<tr/>").addClass("outlet").append($("<td/>").append(outlet_name)).append($("<td/>").append(outlet_value)).append($("<td/>").append(outlet_cycler)));
+                             outlet_container.append($("<tr/>").addClass("outlet").append($("<th/>").append(outlet_name)).append($("<td/>").append(outlet_value)).append($("<td/>").append(outlet_cycler)));
                          }
                         );
                   $.each(data.adc,function(i,e)

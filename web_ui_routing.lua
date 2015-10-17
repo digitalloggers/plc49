@@ -14,7 +14,7 @@ local routing_table={
     "/state/output/(%d+)/value", "web_ui_output_idx",
     "/state/output/(%d+)/cycle", "web_ui_output_cycle",
     "/state/output/all/name",    {"web_ui_output",      "name"},
-    "/state/output/all/value",   {"web_ui_output",      "value"},
+    "/state/output/all/value",   "web_ui_output_idx",
     "/state/output/all/cycle",   "web_ui_output_cycle",
     "/state/adc",                {"web_ui_adc",         false},
     "/state/adc/(%d+)",          {"web_ui_adc",         false},
@@ -25,6 +25,7 @@ local routing_table={
 
     "/config",                   "web_ui_config",
     "/config/name",              {"web_ui_str",         "name"},
+    "/config/cycle_time",        {"web_ui_str",         "cycle_time"},
     "/config/wifi_mode",         "web_ui_wifi_mode",
     "/config/wifi_ap",           {"web_ui_wifi_config", "ap"},
     "/config/wifi_sta",          {"web_ui_wifi_config", "sta"},
@@ -61,6 +62,7 @@ return function(state,data)
             end
         end
         if handler then
+            print("OPEN!",handler.."_"..method)
             if file.open(handler.."_"..method..".lua") or file.open(handler.."_"..method..".lc") then
                 file.close()
                 return handler.."_"..method,arguments or {}

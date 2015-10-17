@@ -3,6 +3,7 @@ local default_value_patterns={
     input_name="Input %d",
     output_name="Outlet %d",
     adc_name="ADC %d",
+    cycle_time="1",
 }
 
 return {

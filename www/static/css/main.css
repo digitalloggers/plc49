@@ -33,11 +33,15 @@ body {
     height: 100%;
 }
 
+.editable {
+    border: 1px solid #390;
+}
+
 .inputs > table {
     width:100%;
 }
 
-.inputs > table td {
+.inputs > table td, .inputs > table th {
     width: 50%;
     border: 1px solid #ccc;
 }
@@ -56,13 +60,21 @@ body {
     color: #0000FF;
 }
 
-
 .outlets > table {
     width:100%;
 }
 
-.outlets > table td {
+.outlets > table tr.all {
+    text-decoration: underline;
+}
+
+.outlets > table th {
     width: 50%;
+    border: 1px solid #ccc;
+}
+
+.outlets > table td {
+    width: 25%;
     border: 1px solid #ccc;
 }
 

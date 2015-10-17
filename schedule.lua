@@ -14,7 +14,9 @@ run_tasks=function()
     while tasks[1] do
         if timer_elapsed_time_us>=tasks[1][1]*1000 then
             timer_elapsed_time_us=timer_elapsed_time_us-tasks[1][1]*1000
-            pcall(unpack(tasks[1],2,tasks[1].n+1))
+            if tasks[1][2] then
+                pcall(unpack(tasks[1],2,tasks[1].n+1))
+            end
             table.remove(tasks,1)
         else
             tasks[1][1]=tasks[1][1]-timer_elapsed_time_us/1000
@@ -61,9 +63,14 @@ local function unschedule_task(task)
         i=i+1
     end
     if tasks[i] then
-        table.remove(tasks,i)
         if i==1 then
-            reset_timer()
+            tasks[i][2]=nil
+        else
+            local delay=tasks[i][1]
+            table.remove(tasks,i)
+            if tasks[i] then
+                tasks[i][1]=tasks[i][1]+delay
+            end
         end
     end
 end
@@ -87,6 +94,6 @@ return function(...)
     end
     schedule_task(task)
     return function()
-        unschedule(task)
+        unschedule_task(task)
     end
 end
