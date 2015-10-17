@@ -10,6 +10,7 @@ local http_status={
 }
 
 local CLIENT_LIMIT=2
+local SEND_SIZE=1400
 
 return function(routing)
     local ret=net.createServer(net.TCP, 30)
@@ -22,6 +23,11 @@ return function(routing)
             local recv_state=false
             local send_state=false
             local latest_error
+            local send_busy
+            local send_buf=""
+            local function send(str)
+                send_buf=send_buf..str
+            end
             if client_count+1>CLIENT_LIMIT then
                 throttle_seconds=throttle_seconds+1
                 c:send(string.format("HTTP/1.0 503 Service Unavailable\r\nRetry-After: %d\r\n\r\n",math.floor(throttle_seconds)))
@@ -54,19 +60,30 @@ return function(routing)
                         content_type="Content-Type: text/plain; charset=\"utf-8\"\r\n"
                         content=latest_error or http_status[send_state]
                     end
-                    s:send(string.format("HTTP/1.0 %d %s\r\n%s\r\n%s",send_state,status_message,content_type or "", content or ""))
+                    send(string.format("HTTP/1.0 %d %s\r\n%s\r\n%s",send_state,status_message,content_type or "", content or ""))
                     send_state=nil
                 end
-                if recv_state==nil and send_state==nil then
+                if not send_busy and send_buf~="" then
+                    s:send(send_buf:sub(1,SEND_SIZE))
+                    send_busy=true
+                    send_buf=send_buf:sub(SEND_SIZE+1)
+                end
+                if not send_busy and recv_state==nil and send_state==nil then
                     s:close()
                 end
             end
             c:on("sent",
                  function(s)
-                     if send_state then
-                         handle_pcall(pcall(send_state,s))
+                     if send_buf=="" then
+                         send_busy=false
+                         if send_state then
+                             handle_pcall(pcall(send_state,send))
+                         end
+                         state_postprocess(s)
+                     else
+                         s:send(send_buf:sub(1,SEND_SIZE))
+                         send_buf=send_buf:sub(SEND_SIZE+1)
                      end
-                     state_postprocess(s)
                  end
             )
             c:on("receive",
@@ -77,7 +94,7 @@ return function(routing)
                              local ok
                              ok,handler=pcall(require_once,handler)
                              if ok then
-                                 handle_pcall(pcall(handler,state,s,data,unpack(arguments)))
+                                 handle_pcall(pcall(handler,state,send,data,unpack(arguments)))
                              else
                                  recv_state=nil
                                  send_state=500
@@ -88,7 +105,7 @@ return function(routing)
                              send_state,latest_error=handler,arguments
                          end
                      elseif recv_state~=nil then
-                         handle_pcall(pcall(recv_state,s,data))
+                         handle_pcall(pcall(recv_state,send,data))
                      end
                      state_postprocess(s)
                  end

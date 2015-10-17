@@ -6,6 +6,6 @@ local mode_map={
     [wifi.STATIONAP]="sta+ap"
 }
 
-return function(state,s,data)
-    return http_util.reply_json(s,mode_map[wifi.getmode()])
+return function(state,send,data)
+    return http_util.reply_json(send,mode_map[wifi.getmode()])
 end

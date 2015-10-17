@@ -2,7 +2,7 @@ local p=require"pinout"
 local config=require"config"
 local http_util=require"http_util"
 
-return function(state,s,data)
+return function(state,send,data)
     idx=idx and tonumber(idx)+1
     local inputs={}
     local outputs={}
@@ -19,5 +19,5 @@ return function(state,s,data)
         adcs[i]={name=config.get_value("adc_name",i),value={adc.read(v[1]),v[2]}}
         tmr.wdclr()
     end
-    return http_util.reply_json(s,{input=inputs,output=outputs,adc=adcs})
+    return http_util.reply_json(send,{input=inputs,output=outputs,adc=adcs})
 end

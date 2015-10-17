@@ -19,7 +19,7 @@ local item_functions={
     value=value
 }
 
-return function(state,s,data,field,idx)
+return function(state,send,data,field,idx)
     idx=idx and tonumber(idx)+1
     local ret
     local item_function=item_functions[field]
@@ -35,5 +35,5 @@ return function(state,s,data,field,idx)
             tmr.wdclr()
         end
     end
-    return http_util.reply_json(s,ret)
+    return http_util.reply_json(send,ret)
 end

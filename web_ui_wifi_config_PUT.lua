@@ -1,7 +1,7 @@
 local http_util=require"http_util"
 
-return function(state,s,data,kind)
-    local function set_config(s,data)
+return function(state,send,data,kind)
+    local function set_config(send,data)
         if type(data)=="table" and #data==2 then
             local mode=wifi.getmode()
             if kind=="ap" then
@@ -30,5 +30,5 @@ return function(state,s,data,kind)
             return 400,nil,"[\"ssid\",\"password\"] expected"
         end
     end
-    return http_util.make_json_receiver(set_config)(s,data)
+    return http_util.make_json_receiver(set_config)(send,data)
 end

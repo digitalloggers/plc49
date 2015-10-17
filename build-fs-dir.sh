@@ -39,6 +39,7 @@ for LUAC_FILE in                \
     web_ui_output_GET.lua       \
     web_ui_output_idx_GET.lua   \
     web_ui_output_idx_PUT.lua   \
+    web_ui_output_cycle_POST.lua\
     web_ui_adc_GET.lua          \
     web_ui_config_GET.lua       \
     web_ui_wifi_mode_GET.lua    \
@@ -50,6 +51,7 @@ for LUAC_FILE in                \
     httpd.lua                   \
     http_util.lua               \
     require_once.lua            \
+    schedule.lua                \
     ; do
     $LUAC -s -o $OUTDIR/${LUAC_FILE%.lua}.lc $HERE/$LUAC_FILE
 done

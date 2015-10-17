@@ -1,17 +1,17 @@
 return {
-    reply_json=function(s,data)
-        s:send("HTTP/1.0 200 OK\r\nContent-Type: application/json; charset=\"utf-8\"\r\n\r\n")
-        s:send(cjson.encode(data))
+    reply_json=function(send,data)
+        send("HTTP/1.0 200 OK\r\nContent-Type: application/json; charset=\"utf-8\"\r\n\r\n")
+        send(cjson.encode(data))
     end,
     make_json_receiver=function(callback)
         local accumulator=""
         local content_length
-        local function try_parse_json(s,data)
+        local function try_parse_json(send,data)
             accumulator=accumulator..data
             if #accumulator==content_length then
                 local ok,result=pcall(cjson.decode,accumulator)
                 if ok then
-                    return callback(s,result)
+                    return callback(send,result)
                 else
                     return 400,nil,"Failed to parse JSON: "..result
                 end
@@ -21,7 +21,7 @@ return {
                 return nil,try_parse_json
             end
         end
-        local function find_data_start(s,data)
+        local function find_data_start(send,data)
             accumulator=accumulator..data
             local header_end,body_pos=accumulator:find("\r\n\r\n.")
             if body_pos then
@@ -33,7 +33,7 @@ return {
                 else
                     local remainder=accumulator:sub(body_pos)
                     accumulator=""
-                    return try_parse_json(s,remainder)
+                    return try_parse_json(send,remainder)
                 end
             else
                 return nil,find_data_start

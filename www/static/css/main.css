@@ -68,7 +68,13 @@ body {
 
 .outlet .value {
     text-align: center;
-    min-width: 6em;
+    min-width: 4em;
+    min-height: 1.5em;
+}
+
+.outlet .cycle {
+    text-align: center;
+    min-width: 4em;
     min-height: 1.5em;
 }
 
@@ -78,6 +84,14 @@ body {
 
 .outlet .value.off {
     color: #000000;
+}
+
+.outlet .cycle.on {
+    color: #000000;
+}
+
+.outlet .cycle.off {
+    color: #FF0000;
 }
 
 .adc .name {

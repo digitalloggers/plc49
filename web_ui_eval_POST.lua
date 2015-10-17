@@ -1,18 +1,18 @@
 local http_util=require"http_util"
 
-return function(state,s,data)
+return function(state,send,data)
     local eval_vars=state.eval_vars
     if not eval_vars then
         eval_vars={}
         state.eval_vars=eval_vars
     end
-    local function run_acc(s,acc)
+    local function run_acc(send,acc)
         if type(acc)~="string" then
             return 400,nil,"String to execute expected"
         end
         -- XXX: We do piecewise JSON output here, something not supported by cjson
-        s:send("HTTP/1.0 200 OK\r\nContent-Type: application/json; charset=\"utf-8\"\r\n\r\n")
-        s:send("[")
+        send("HTTP/1.0 200 OK\r\nContent-Type: application/json; charset=\"utf-8\"\r\n\r\n")
+        send("[")
         local maybe_comma=""
         local status
         if acc:sub(1,1)=="=" then
@@ -29,7 +29,7 @@ return function(state,s,data)
                         output=output..tostring(args[i])..(i==n and "\n" or "\t")
                     end
                 end
-                s:send(string.format("%s[%q,%s]",maybe_comma,"print",cjson.encode(output)))
+                send(string.format("%s[%q,%s]",maybe_comma,"print",cjson.encode(output)))
                 maybe_comma=","
             end
             setfenv(fn,
@@ -55,16 +55,16 @@ return function(state,s,data)
             local ok
             ok,err=pcall(fn)
             if not ok then
-                s:send(string.format("%s[%q,%s]",maybe_comma,"run-error",cjson.encode(err or "")))
+                send(string.format("%s[%q,%s]",maybe_comma,"run-error",cjson.encode(err or "")))
                 maybe_comma=","
             end
         else
-            s:send(string.format("%s[%q,%s]",maybe_comma,"parse-error",cjson.encode(err or "")))
+            send(string.format("%s[%q,%s]",maybe_comma,"parse-error",cjson.encode(err or "")))
             maybe_comma=","
         end
-        s:send(string.format("%s[%q,%d]",maybe_comma,"heap",node.heap()))
+        send(string.format("%s[%q,%d]",maybe_comma,"heap",node.heap()))
         maybe_comma=","
-        s:send("]")
+        send("]")
     end
-    return http_util.make_json_receiver(run_acc)(s,data)
+    return http_util.make_json_receiver(run_acc)(send,data)
 end

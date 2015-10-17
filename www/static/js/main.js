@@ -112,6 +112,7 @@ $(function()
       var sta_form=$("form.wifi-sta");
       var input_values=[];
       var outlet_values=[];
+      var outlet_cyclers=[];
       var adc_updaters=[];
 
       var periodic_request;
@@ -125,6 +126,7 @@ $(function()
       var updateOutlet=function(index,state)
       {
           outlet_values[index].removeClass(!state?"on":"off").addClass(state?"on":"off").text(state?"ON":"OFF");
+          outlet_cyclers[index].removeClass(!state?"on":"off").addClass(state?"on":"off").text(state?"CYCLE":"PULSE");
       };
       var updateADC=function(index,fractional_value)
       {
@@ -174,7 +176,7 @@ $(function()
                              var input_name=$("<span/>").addClass("name").text(e.name);
                              var input_value=$("<span/>").addClass("value");
                              input_values[i]=input_value;
-                             makeEditable(input_name,"/config/input/"+i+"/name");
+                             makeEditable(input_name,"/state/input/"+i+"/name");
                              updateInput(i,e.value);
                              input_container.append($("<tr/>").addClass("input").append($("<td/>").append(input_name)).append($("<td/>").append(input_value)));
                          }
@@ -183,8 +185,10 @@ $(function()
                          {
                              var outlet_name=$("<span/>").addClass("name").text(e.name);
                              var outlet_value=$("<button/>").addClass("value");
+                             var outlet_cycler=$("<button/>").addClass("cycle");
                              outlet_values[i]=outlet_value;
-                             makeEditable(outlet_name,"/config/output/"+i+"/name");
+                             outlet_cyclers[i]=outlet_cycler;
+                             makeEditable(outlet_name,"/state/output/"+i+"/name");
                              updateOutlet(i,e.value);
                              outlet_value.click(
                                  function()
@@ -193,8 +197,13 @@ $(function()
                                      insistentAjax({url:"/state/output/"+i.toString()+"/value",data:new_state,type:"PUT",contentType:"application/json",success:function() {
                                          updateOutlet(i,new_state);
                                      }});
-                                 })
-                             outlet_container.append($("<tr/>").addClass("outlet").append($("<td/>").append(outlet_name)).append($("<td/>").append(outlet_value)));
+                                 });
+                             outlet_cycler.click(
+                                 function()
+                                 {
+                                     insistentAjax({url:"/state/output/"+i.toString()+"/cycle",type:"POST"});
+                                 });
+                             outlet_container.append($("<tr/>").addClass("outlet").append($("<td/>").append(outlet_name)).append($("<td/>").append(outlet_value)).append($("<td/>").append(outlet_cycler)));
                          }
                         );
                   $.each(data.adc,function(i,e)
@@ -210,7 +219,7 @@ $(function()
                                  label.text(value+"/"+limit);
                              }
                              adc_updaters[i]=update_this_adc;
-                             makeEditable(name,"/config/adc/"+i+"/name");
+                             makeEditable(name,"/state/adc/"+i+"/name");
                              updateADC(i,e.value);
                              adc_container.append(adc_block.append(name).append(value.append(gauge).append(label)));
                          }

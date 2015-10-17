@@ -6,9 +6,9 @@ local mode_map={
     ["sta+ap"]=wifi.STATIONAP
 }
 
-return function(state,s,data)
+return function(state,send,data)
     local acc=""
-    local function set_mode(s,mode)
+    local function set_mode(send,mode)
         mode=mode_map[mode]
         if mode then
             wifi.setmode(mode)
@@ -17,5 +17,5 @@ return function(state,s,data)
             return 400,nil,"\"ap\",\"sta\" or \"sta+ap\" expected"
         end
     end
-    return http_util.make_json_receiver(set_mode)(s,data)
+    return http_util.make_json_receiver(set_mode)(send,data)
 end

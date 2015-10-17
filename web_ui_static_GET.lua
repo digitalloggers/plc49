@@ -8,7 +8,7 @@ local mimetypes={
     ["js"] = "text/javascript; charset=\"utf-8\""
 }
 
-return function(state,s,data,staticroot,url)
+return function(state,send,data,staticroot,url)
     local curfile
     local curpos=0
     local found
@@ -25,19 +25,19 @@ return function(state,s,data,staticroot,url)
         found="gzip"
     end
     if found then
-        s:send("HTTP/1.0 200 OK\r\n")
+        send("HTTP/1.0 200 OK\r\n")
         local ext=url:match(".*%.(%w*)")
         if found=="gzip" then
-            s:send("Content-Encoding: gzip\r\n")
+            send("Content-Encoding: gzip\r\n")
         end
-        s:send("Content-Type: "..(mimetypes[ext] or "application/octet-stream").."\r\n\r\n")
+        send("Content-Type: "..(mimetypes[ext] or "application/octet-stream").."\r\n\r\n")
         local function sendfile(s)
             file.open(curfile)
             file.seek("set",curpos)
             local data=file.read()
             if data then
                 curpos=curpos+#data
-                s:send(data)
+                send(data)
             end
             file.close()
             return data and sendfile
